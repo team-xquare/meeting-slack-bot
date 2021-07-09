@@ -15,27 +15,23 @@ WORKING_DIR=${PROJECT_DIR}
 if [ "$CURRENT_DIR" != "${PROJECT_DIR}" ]; then
   echo "Current dir is not project dir."
   echo "Change to project dir.. (Project directory path = $WORKING_DIR"
-  cd $WORKING_DIR || exit 1
+  cd "$WORKING_DIR" || exit 1
 fi
 
 # Clean build files
 function clean() {
-  rm -rf $HOME/.gradle/caches/
+  echo "Cleaning build files.."
   rm -rf ./build
 }
 
-if [ ! -d logs ]; then
+if [ ! -d log ]; then
   echo "Log folder not exists. Creating log folder.."
   mkdir log
 fi
 
+clean
 echo "Starting application.."
 chmod +x gradlew
 ./gradlew run > "log/$NOW.log"
-
-if [ $? -eq 0 ]; then
-  echo "Process failed. Check log files"
-  exit 1
-fi
 
 exit 0
