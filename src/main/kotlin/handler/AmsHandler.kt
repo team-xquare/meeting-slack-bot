@@ -33,6 +33,6 @@ class AmsHandler {
      * @return Response
      */
     fun handleViewSchedule(request: ViewSubmissionRequest, ctx: ViewSubmissionContext): Response {
-
+        return ctx.ack()
     }
 }
