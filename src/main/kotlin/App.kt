@@ -7,6 +7,7 @@ fun main() {
     val amsHandler = AmsHandler()
 
     app.command("/ams", amsHandler::addSchedule)
+    app.viewSubmission("add-schedule", amsHandler::handleViewSchedule)
     app.viewClosed("add-schedule") { _, ctx ->
         ctx.ack()
     }

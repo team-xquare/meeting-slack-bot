@@ -1,8 +1,7 @@
 package view.modal
 
 import com.slack.api.model.block.Blocks.*
-import com.slack.api.model.block.composition.BlockCompositions.option
-import com.slack.api.model.block.composition.BlockCompositions.plainText
+import com.slack.api.model.block.composition.BlockCompositions.*
 import com.slack.api.model.block.element.BlockElements.*
 import com.slack.api.model.view.View
 import com.slack.api.model.view.Views.*
@@ -60,19 +59,56 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
-                        .label(
-                            plainText("회의 시간")
-                        )
+                        .label(plainText("회의 내용"))
                         .element(
-                            staticSelect { select ->
-                                select
-                                    .actionId("hour-picker")
-                                    .options(
-                                        listOf(0..24).map { i -> option { it.description(i).value(i) } }
-                                    )
+                            plainTextInput {
+                                it
+                                    .actionId("meeting-description")
+                                    .placeholder(plainText("회의할 내용을 간단히 입력해주세요."))
+                                    .multiline(true)
                             }
                         )
                 }
+//                input { input ->
+//                    input
+//                        .label(
+//                            plainText("시간 선택")
+//                        )
+//                        .element(
+//                            staticSelect { select ->
+//                                select
+//                                    .actionId("hour-picker")
+//                                    .placeholder(plainText("회의할 시간의 시간을 선택해주세요"))
+//                                    .options(
+//                                        (0..24).map { number ->
+//                                            option { option ->
+//                                                option.description(plainText { it.text("$number") }).value("number")
+//                                            }
+//                                        }
+//                                    )
+//                            }
+//                        )
+//                },
+//                input { input ->
+//                    input
+//                        .label(
+//                            plainText("분 선택")
+//                        )
+//                        .element(
+//                            staticSelect { select ->
+//                                select
+//                                    .actionId("minute-picker")
+//                                    .placeholder(plainText("회의할 시간의 분을 선택해주세요"))
+//                                    .options(
+//                                        (0..60).map { number ->
+//                                            option { option ->
+//                                                option.description(plainText { it.text("$number") }).value("number")
+//                                            }
+//                                        }
+//                                    )
+//                            }
+//                        )
+//                }
             )
         )
 }

@@ -1,7 +1,9 @@
 package handler
 
 import com.slack.api.bolt.context.builtin.SlashCommandContext
+import com.slack.api.bolt.context.builtin.ViewSubmissionContext
 import com.slack.api.bolt.request.builtin.SlashCommandRequest
+import com.slack.api.bolt.request.builtin.ViewSubmissionRequest
 import com.slack.api.bolt.response.Response
 import view.modal.buildScheduleModal
 
@@ -24,5 +26,13 @@ class AmsHandler {
 
         return if (response.isOk) ctx.ack()
         else Response.builder().statusCode(500).body(response.error).build()
+    }
+
+    /**
+     * Handle adding request from view
+     * @return Response
+     */
+    fun handleViewSchedule(request: ViewSubmissionRequest, ctx: ViewSubmissionContext): Response {
+
     }
 }
