@@ -20,6 +20,7 @@ fun buildScheduleModal(): View = view { view ->
             asBlocks(
                 input { input ->
                     input
+                        .blockId("meeting-agenda-input-block")
                         .label(
                             plainText("회의 안건")
                         )
