@@ -1,0 +1,41 @@
+#!/bin/bash
+
+NOW=$(date "+%Y-%m-%d-%m-%s")
+CURRENT_DIR=$(pwd)
+
+# Check if PROJECT_DIR environment exists
+if [ "${PROJECT_DIR}" == "" ]; then
+  echo "Failed: Check your project directory environment."
+  exit 1
+fi
+
+WORKING_DIR=${PROJECT_DIR}
+
+# Change workdir if current directory is not PROJECT_DIR.
+if [ "$CURRENT_DIR" != "${PROJECT_DIR}" ]; then
+  echo "Current dir is not project dir."
+  echo "Change to project dir.. (Project directory path = $WORKING_DIR"
+  cd $WORKING_DIR || exit 1
+fi
+
+# Clean build files
+function clean() {
+  rm -rf $HOME/.gradle/caches/
+  rm -rf ./build
+}
+
+if [ ! -d logs ]; then
+  echo "Log folder not exists. Creating log folder.."
+  mkdir log
+fi
+
+echo "Starting application.."
+chmod +x gradlew
+./gradlew run > "log/$NOW.log"
+
+if [ $? -eq 0 ]; then
+  echo "Process failed. Check log files"
+  exit 1
+fi
+
+exit 0
