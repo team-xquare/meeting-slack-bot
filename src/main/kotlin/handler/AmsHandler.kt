@@ -40,6 +40,10 @@ class AmsHandler {
 
         val values = request.payload.view.state.values
 
+        ctx.client().chatPostMessage {
+            it.channel(request.)
+        }
+
         ctx.respond { res -> res
             .responseType(ResponseTypes.inChannel)
             .blocks(buildNotifyScheduleBlock(values))

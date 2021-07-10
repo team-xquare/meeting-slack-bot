@@ -14,7 +14,7 @@ WORKING_DIR=${PROJECT_DIR}
 # Change workdir if current directory is not PROJECT_DIR.
 if [ "$CURRENT_DIR" != "${PROJECT_DIR}" ]; then
   echo "Current dir is not project dir."
-  echo "Change to project dir.. (Project directory path = $WORKING_DIR"
+  echo "Change to project dir.. (Project directory path = $WORKING_DIR)"
   cd "$WORKING_DIR" || exit 1
 fi
 
