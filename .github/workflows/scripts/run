@@ -15,8 +15,7 @@ if [ ! -d log ]; then
 fi
 
 clean
-echo "Starting application.."
-chmod +x gradlew
-./gradlew run > "log/$NOW.log"
+
+nohup java -jar ${PROJECT_DIR}/build/libs/*.jar > /home/ubuntu/nohup.out 2>&1 &
 
 exit 0
