@@ -19,8 +19,7 @@ class NotificationMessageSender : MessageSender(), NotificationSender {
 
         val response = methods.chatPostMessage { message -> message
             .channel("#bot-testing")
-            .text("새 회의 추가됨")
-            .blocks(buildNotifyScheduleBlock(meeting))
+            .attachments(buildNotifyScheduleBlock(meeting))
         }
 
         if (!response.isOk)

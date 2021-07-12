@@ -8,7 +8,7 @@ fun main() {
     val notifySender = NotificationMessageSender()
     val amsHandler = AmsHandler(notifySender)
 
-    app.command("/ams", amsHandler::addSchedule)
+    app.command("/meeting", amsHandler::addSchedule)
     app.viewSubmission("add-schedule", amsHandler::handleViewSchedule)
     app.viewClosed("add-schedule") { _, ctx ->
         ctx.ack()
