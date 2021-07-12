@@ -34,6 +34,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-attender-input-block")
                         .label(
                             plainText("참석자")
                         )
@@ -47,6 +48,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-date-input-block")
                         .label(
                             plainText("회의 날짜")
                         )
@@ -60,6 +62,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-time-hour-input-block")
                         .label(
                             plainText("시")
                         )
@@ -85,6 +88,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-time-minute-input-block")
                         .label(
                             plainText("분")
                         )
@@ -105,6 +109,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-block")
                         .label(plainText("회의 내용"))
                         .element(
                             plainTextInput {

@@ -1,10 +1,12 @@
 import com.slack.api.bolt.App
 import com.slack.api.bolt.socket_mode.SocketModeApp
 import handler.AmsHandler
+import sender.notification.NotificationMessageSender
 
 fun main() {
     val app = App()
-    val amsHandler = AmsHandler()
+    val notifySender = NotificationMessageSender()
+    val amsHandler = AmsHandler(notifySender)
 
     app.command("/ams", amsHandler::addSchedule)
     app.viewSubmission("add-schedule", amsHandler::handleViewSchedule)

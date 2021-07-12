@@ -5,17 +5,16 @@ import com.slack.api.bolt.context.builtin.ViewSubmissionContext
 import com.slack.api.bolt.request.builtin.SlashCommandRequest
 import com.slack.api.bolt.request.builtin.ViewSubmissionRequest
 import com.slack.api.bolt.response.Response
-import com.slack.api.bolt.response.ResponseTypes
-import view.block.buildNotifyScheduleBlock
+import sender.notification.NotificationSender
 import view.modal.buildScheduleModal
-import kotlin.reflect.javaType
-import kotlin.reflect.typeOf
 
 /**
  * Handle requests for adding or deleting meeting schedules
  * @author smoothbear
  */
-class AmsHandler {
+class AmsHandler(
+    private val nfSender: NotificationSender
+) {
     /**
      * Handle request for adding schedules
      * @return Response
@@ -40,14 +39,7 @@ class AmsHandler {
 
         val values = request.payload.view.state.values
 
-        ctx.client().chatPostMessage {
-            it.channel(request.)
-        }
-
-        ctx.respond { res -> res
-            .responseType(ResponseTypes.inChannel)
-            .blocks(buildNotifyScheduleBlock(values))
-        }
+        nfSender.sendNotification(values)
 
         return ctx.ack()
     }
