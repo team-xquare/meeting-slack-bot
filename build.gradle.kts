@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.litote.kmongo:kmongo:4.2.8")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -25,4 +26,17 @@ dependencies {
 
 application {
     mainClass.set("AppKt")
+}
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "AppKt"
+    }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
