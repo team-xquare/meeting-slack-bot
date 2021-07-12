@@ -6,7 +6,7 @@ import com.slack.api.model.block.Blocks.*
 import com.slack.api.model.block.composition.BlockCompositions.markdownText
 import com.slack.api.model.block.composition.BlockCompositions.plainText
 import com.slack.api.model.block.element.BlockElements.*
-import model.Meeting
+import sender.dto.Meeting
 
 fun buildNotifyScheduleBlock(meeting: Meeting): List<Attachment> = listOf(
     attachment { attachment -> attachment

@@ -1,10 +1,14 @@
 package model
 
-class Meeting (
-    val agenda: String,
-    val attender: List<String>,
-    val description: String,
+import org.bson.codecs.pojo.annotations.BsonId
+import java.util.*
+
+data class Meeting (
+    @BsonId
+    val id: UUID = UUID.randomUUID(),
     val date: String,
-    val hour: String,
-    val minute: String
+    val time: String,
+    val attenders: List<String>,
+    val approves: List<String>,
+    val denys: List<String>
 )

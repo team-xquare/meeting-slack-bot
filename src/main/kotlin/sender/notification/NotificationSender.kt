@@ -1,7 +1,7 @@
 package sender.notification
 
-import com.slack.api.model.view.ViewState
+import sender.dto.Meeting
 
 interface NotificationSender {
-    fun sendNotification(value: Map<String, Map<String, ViewState.Value>>)
+    fun sendNotification(meeting: Meeting)
 }

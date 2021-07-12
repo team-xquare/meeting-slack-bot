@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation("org.litote.kmongo:kmongo:4.2.8")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.slack.api:bolt-socket-mode:$slackSdkVersion")
     implementation("com.slack.api:slack-api-client:$slackSdkVersion")
