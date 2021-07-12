@@ -98,10 +98,10 @@ class MeetingHandler(
         if (!result.attenders.contains(userId)) {
             ctx.respond { it
                 .responseType(ResponseTypes.ephemeral)
-                .text("회의 멤버에 존재하지 않습니다.")
+                .text("⚠️ 회의 멤버에 존재하지 않습니다.")
             }
 
-            ctx.ack()
+            return ctx.ack()
         }
 
         if (result.denys.contains(userId)) {
@@ -116,7 +116,7 @@ class MeetingHandler(
 
         ctx.respond { it
             .responseType(ResponseTypes.ephemeral)
-            .text("회의 참여 신청이 성공적으로 완료되었습니다.")
+            .text("✅ 회의 참여 신청이 성공적으로 완료되었습니다.")
         }
 
         return ctx.ack()
@@ -140,10 +140,10 @@ class MeetingHandler(
         if (!result.attenders.contains(userId)) {
             ctx.respond { it
                 .responseType(ResponseTypes.ephemeral)
-                .text("회의 멤버에 존재하지 않습니다.")
+                .text("⚠️ 회의 멤버에 존재하지 않습니다.")
             }
 
-            ctx.ack()
+            return ctx.ack()
         }
 
         if (result.approves.contains(userId)) {
@@ -158,7 +158,7 @@ class MeetingHandler(
 
         ctx.respond { it
             .responseType(ResponseTypes.ephemeral)
-            .text("회의 참여 거부가 성공적으로 완료되었습니다.")
+            .text("✅ 회의 참여 거부가 성공적으로 완료되었습니다.")
         }
 
         return ctx.ack()
