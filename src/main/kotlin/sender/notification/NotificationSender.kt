@@ -1,7 +1,7 @@
 package sender.notification
 
-import sender.dto.Meeting
+import sender.dto.SenderMeeting
 
 interface NotificationSender {
-    fun sendNotification(meeting: Meeting)
+    fun sendNotification(senderMeeting: SenderMeeting)
 }

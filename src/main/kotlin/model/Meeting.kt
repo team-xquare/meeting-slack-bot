@@ -6,9 +6,10 @@ import java.util.*
 data class Meeting (
     @BsonId
     val id: UUID = UUID.randomUUID(),
+    val meetingId: String,
     val date: String,
     val time: String,
     val attenders: List<String>,
-    val approves: List<String>,
-    val denys: List<String>
+    val approves: Set<String>,
+    val denys: Set<String>
 )
