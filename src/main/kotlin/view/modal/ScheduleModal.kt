@@ -20,6 +20,7 @@ fun buildScheduleModal(): View = view { view ->
             asBlocks(
                 input { input ->
                     input
+                        .blockId("meeting-agenda-input-block")
                         .label(
                             plainText("회의 안건")
                         )
@@ -33,6 +34,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-attender-input-block")
                         .label(
                             plainText("참석자")
                         )
@@ -46,6 +48,7 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-date-input-block")
                         .label(
                             plainText("회의 날짜")
                         )
@@ -59,6 +62,54 @@ fun buildScheduleModal(): View = view { view ->
                 },
                 input { input ->
                     input
+                        .blockId("meeting-time-hour-input-block")
+                        .label(
+                            plainText("시")
+                        )
+                        .element(
+                            staticSelect { select ->
+                                select
+                                    .actionId("hour-picker")
+                                    .placeholder(plainText("회의할 시각의 시간을 선택해주세요"))
+                                    .options(
+                                        (0..23).map { number ->
+                                            if (number - 12 < 0)
+                                                option { option ->
+                                                    option.value("$number").text(plainText("오전 ${if (number != 0) number else 12}시"))
+                                                }
+                                            else
+                                                option { option ->
+                                                    option.value("$number").text(plainText("오후 ${if (number - 12 != 0) number - 12 else 12}시"))
+                                                }
+                                        }
+                                    )
+                            }
+                        )
+                },
+                input { input ->
+                    input
+                        .blockId("meeting-time-minute-input-block")
+                        .label(
+                            plainText("분")
+                        )
+                        .element(
+                            staticSelect { select ->
+                                select
+                                    .actionId("minute-picker")
+                                    .placeholder(plainText("회의할 시간의 분을 선택해주세요"))
+                                    .options(
+                                        (0..59).map { number ->
+                                            option { option ->
+                                                option.value("$number").text(plainText("${number}분"))
+                                            }
+                                        }
+                                    )
+                            }
+                        )
+                },
+                input { input ->
+                    input
+                        .blockId("meeting-block")
                         .label(plainText("회의 내용"))
                         .element(
                             plainTextInput {
@@ -69,46 +120,6 @@ fun buildScheduleModal(): View = view { view ->
                             }
                         )
                 }
-//                input { input ->
-//                    input
-//                        .label(
-//                            plainText("시간 선택")
-//                        )
-//                        .element(
-//                            staticSelect { select ->
-//                                select
-//                                    .actionId("hour-picker")
-//                                    .placeholder(plainText("회의할 시간의 시간을 선택해주세요"))
-//                                    .options(
-//                                        (0..24).map { number ->
-//                                            option { option ->
-//                                                option.description(plainText { it.text("$number") }).value("number")
-//                                            }
-//                                        }
-//                                    )
-//                            }
-//                        )
-//                },
-//                input { input ->
-//                    input
-//                        .label(
-//                            plainText("분 선택")
-//                        )
-//                        .element(
-//                            staticSelect { select ->
-//                                select
-//                                    .actionId("minute-picker")
-//                                    .placeholder(plainText("회의할 시간의 분을 선택해주세요"))
-//                                    .options(
-//                                        (0..60).map { number ->
-//                                            option { option ->
-//                                                option.description(plainText { it.text("$number") }).value("number")
-//                                            }
-//                                        }
-//                                    )
-//                            }
-//                        )
-//                }
             )
         )
 }
