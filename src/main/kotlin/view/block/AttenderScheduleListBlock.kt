@@ -17,10 +17,10 @@ fun buildAttenderScheduleListBlock(schedules: MongoIterable<GetScheduleDto>): Li
                         .blockId("schedule-section")
                         .text(
                             markdownText(
-                                "날짜: ${schedule.date}" +
-                                        "시간: ${schedule.time}" +
+                            "날짜: ${schedule.date}\n" +
+                                    "시간: ${schedule.time}\n" +
                                 "회의 참석자: ${schedule.approves.joinToString(" ") { attender -> "<@$attender>" }}\n" +
-                                "회의 불참자: ${schedule.denys.joinToString(" ") { deny -> "<@$deny>"}}\n"
+                                "회의 불참자: ${schedule.denys.joinToString(" ") { deny -> "<@$deny>"}}"
                             )
                         )
                     }
