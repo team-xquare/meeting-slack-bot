@@ -14,13 +14,15 @@ class AttenderHandler (
     private val col: MongoCollection<Meeting>
 ) {
     fun getSchedule(request: SlashCommandRequest, ctx: SlashCommandContext): Response {
-        val meetings = col.find(Meeting::date eq request.payload.text)
-        val schedules = meetings.map { meeting -> GetScheduleDto(date = meeting.date, time = meeting.time, approves = meeting.approves, denys = meeting.denys) }
+        val meetings = if (request.payload.text.length == 10) col.find(Meeting::date eq request.payload.text) else col.find()
+        val schedules = meetings.map { meeting -> GetScheduleDto(agenda = meeting.agenda, date = meeting.date, time = meeting.time, approves = meeting.approves, denys = meeting.denys) }
 
-        ctx.respond { respond -> respond
+        val blocks = buildAttenderScheduleListBlock(schedules)
+
+        ctx.respond { it
             .responseType(ResponseTypes.ephemeral)
-            .text("회의 목록과 참여 여부")
-            .attachments(buildAttenderScheduleListBlock(schedules))
+            .text("회의 참석자 및 불참자")
+            .attachments(blocks)
         }
 
         return ctx.ack()

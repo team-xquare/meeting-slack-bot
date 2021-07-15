@@ -1,6 +1,7 @@
 package handler.dto
 
 class GetScheduleDto (
+    val agenda: String,
     val date: String,
     val time: String,
     val approves: Set<String>,

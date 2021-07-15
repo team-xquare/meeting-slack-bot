@@ -11,17 +11,22 @@ fun main() {
     val app = App()
     val notifySender = NotificationMessageSender()
 
-    val col = KMongo.createClient(System.getenv("MONGO_URL")).getDatabase("meeting").getCollection<Meeting>()
+    val col = KMongo.createClient(System.getenv("MONGO_URL")).getDatabase("meeting-develop").getCollection<Meeting>()
     val meetingHandler = MeetingHandler(notifySender, col)
     val attenderHandler = AttenderHandler(col)
 
-    // Commands
+//  Commands
     app.command("/meeting", meetingHandler::addSchedule)
     app.command("/mtattender", attenderHandler::getSchedule)
 
     // Modal
     app.viewSubmission("add-schedule", meetingHandler::handleViewSchedule)
     app.viewClosed("add-schedule") { _, ctx ->
+        ctx.ack()
+    }
+
+    app.viewSubmission("deny-schedule", meetingHandler::handleDenyView)
+    app.viewClosed("deny-schedule") { _, ctx ->
         ctx.ack()
     }
 

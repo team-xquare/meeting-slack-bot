@@ -16,6 +16,7 @@ import org.litote.kmongo.*
 import sender.dto.SenderMeeting
 import sender.exception.MeetingNotFoundException
 import sender.notification.NotificationSender
+import view.modal.buildDenyModal
 import view.modal.buildScheduleModal
 import java.util.*
 
@@ -65,11 +66,13 @@ class MeetingHandler(
         col.insertOne(
             Meeting(
                 meetingId = colId.toString(),
+                agenda = meeting.agenda,
                 date = meeting.date,
                 time = meeting.hour + " " + meeting.minute,
                 attenders = meeting.attender,
                 approves = setOf(),
-                denys = setOf()
+                denys = setOf(),
+                denyReason = hashMapOf()
             )
         )
 
@@ -146,6 +149,27 @@ class MeetingHandler(
             return ctx.ack()
         }
 
+        ctx.client().viewsOpen { it
+            .triggerId(ctx.triggerId)
+            .view(buildDenyModal(value))
+        }
+
+        return ctx.ack()
+    }
+
+    fun handleDenyView(request: ViewSubmissionRequest, ctx: ViewSubmissionContext): Response {
+
+        val userId = request.payload.user.id
+
+        val values = request.payload.view.state.values
+
+        val value = values["meeting-id"] ?: ""
+        val reason = values["meeting-deny-reason-input-block"]!!["meeting-deny-reason"]!!.value
+
+        val result: Meeting? = col.findOne(Meeting::meetingId eq value)
+
+        result ?: throw MeetingNotFoundException()
+
         if (result.approves.contains(userId)) {
             val approves = result.approves.minus(userId)
 
@@ -153,13 +177,10 @@ class MeetingHandler(
         }
 
         val denys = result.denys.plus(userId)
+        result.denyReason[userId] = reason
 
         col.updateOne(result::meetingId eq value, Meeting::denys setTo denys)
-
-        ctx.respond { it
-            .responseType(ResponseTypes.ephemeral)
-            .text("✅ 회의 참여 거부가 성공적으로 완료되었습니다.")
-        }
+        col.updateOne(result::denyReason eq value, Meeting::denyReason setTo result.denyReason)
 
         return ctx.ack()
     }
@@ -175,4 +196,12 @@ class MeetingHandler(
 
         return button.value
     }
+
+//    /**
+//     * Getting Meeting List by agenda
+//     */
+//    private fun getMeeting(request: SlashCommandRequest, ctx: ActionContext): String {
+//        val agenda = request.payload.text
+//
+//    }
 }
