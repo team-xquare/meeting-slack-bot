@@ -161,9 +161,9 @@ class MeetingHandler(
 
         val userId = request.payload.user.id
 
+        val value = request.payload.view.privateMetadata
         val values = request.payload.view.state.values
 
-        val value = values["meeting-id"] ?: ""
         val reason = values["meeting-deny-reason-input-block"]!!["meeting-deny-reason"]!!.value
 
         val result: Meeting? = col.findOne(Meeting::meetingId eq value)
@@ -180,7 +180,12 @@ class MeetingHandler(
         result.denyReason[userId] = reason
 
         col.updateOne(result::meetingId eq value, Meeting::denys setTo denys)
-        col.updateOne(result::denyReason eq value, Meeting::denyReason setTo result.denyReason)
+        col.updateOne(result::meetingId eq value, Meeting::denyReason setTo result.denyReason)
+
+        ctx.respond { it
+            .responseType(ResponseTypes.ephemeral)
+            .text("✅ 회의 참여 거부가 성공적으로 완료되었습니다.")
+        }
 
         return ctx.ack()
     }

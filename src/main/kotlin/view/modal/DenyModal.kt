@@ -9,6 +9,7 @@ import com.slack.api.model.view.Views.*
 
 fun buildDenyModal(value: String): View = view { view -> view
     .callbackId("deny-schedule")
+    .privateMetadata(value)
     .type("modal")
     .notifyOnClose(true)
     .title(viewTitle { it.type("plain_text").text("회의 참가 거부 신청").emoji(true) })
@@ -16,10 +17,6 @@ fun buildDenyModal(value: String): View = view { view -> view
     .close(viewClose { it.type("plain_text").text("취소") })
     .blocks(
         asBlocks(
-            section { it
-                .blockId("meeting-id")
-                .text(markdownText("회의 ID: $value"))
-            },
             input { input -> input
                 .blockId("meeting-deny-reason-input-block")
                 .label(
