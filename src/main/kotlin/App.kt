@@ -11,7 +11,7 @@ fun main() {
     val app = App()
     val notifySender = NotificationMessageSender()
 
-    val col = KMongo.createClient(System.getenv("MONGO_URL")).getDatabase("meeting-develop").getCollection<Meeting>()
+    val col = KMongo.createClient(System.getenv("MONGO_URL")).getDatabase(System.getenv("MONGO_NAME")).getCollection<Meeting>()
     val meetingHandler = MeetingHandler(notifySender, col)
     val attenderHandler = AttenderHandler(col)
 
