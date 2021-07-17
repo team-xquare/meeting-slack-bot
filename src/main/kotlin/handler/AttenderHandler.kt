@@ -15,7 +15,7 @@ class AttenderHandler (
 ) {
     fun getSchedule(request: SlashCommandRequest, ctx: SlashCommandContext): Response {
         val meetings = if (request.payload.text.length == 10) col.find(Meeting::date eq request.payload.text) else col.find()
-        val schedules = meetings.map { meeting -> GetScheduleDto(agenda = meeting.agenda, date = meeting.date, time = meeting.time, approves = meeting.approves, denys = meeting.denys) }
+        val schedules = meetings.map { meeting -> GetScheduleDto(agenda = meeting.agenda, date = meeting.date, time = meeting.time, approves = meeting.approves, denys = meeting.denys, denyReason = meeting.denyReason) }
 
         val blocks = buildAttenderScheduleListBlock(schedules)
 

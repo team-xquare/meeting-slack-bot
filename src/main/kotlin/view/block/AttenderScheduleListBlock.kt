@@ -4,10 +4,10 @@ import com.mongodb.client.MongoIterable
 import com.slack.api.model.Attachment
 import com.slack.api.model.Attachments.attachment
 import com.slack.api.model.block.Blocks.*
-import com.slack.api.model.block.LayoutBlock
-import com.slack.api.model.block.SectionBlock
 import com.slack.api.model.block.composition.BlockCompositions.markdownText
 import handler.dto.GetScheduleDto
+import util.concat.convertToMention
+import util.concat.mergeReason
 
 fun buildAttenderScheduleListBlock(schedules: MongoIterable<GetScheduleDto>): List<Attachment> = listOf(
     attachment { attachment -> attachment
@@ -22,8 +22,13 @@ fun buildAttenderScheduleListBlock(schedules: MongoIterable<GetScheduleDto>): Li
                             "안건: ${schedule.agenda}\n" +
                                     "날짜: ${schedule.date}\n" +
                                     "시간: ${schedule.time}\n" +
-                                    "회의 참석자: ${schedule.approves.joinToString(" ") { attender -> "<@$attender>" }}\n" +
-                                    "회의 불참자: ${schedule.denys.joinToString(" ") { deny -> "<@$deny>"}}"
+                                    "회의 참석자: ${convertToMention(schedule.approves)}}\n" +
+                                    "회의 불참자: ${convertToMention(schedule.denys)}\n" +
+                                    "*불참자 사유*\n${
+                                        mergeReason(
+                                            schedule.denyReason.keys, schedule.denyReason.values.toList()
+                                        ).joinToString { reason -> reason + "\n" }
+                                    }"
                         )
                     )
                 }
