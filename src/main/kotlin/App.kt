@@ -5,14 +5,17 @@ import handler.MeetingHandler
 import model.Meeting
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.getCollection
+import sender.notification.DenyMessageSender
 import sender.notification.NotificationMessageSender
 
 fun main() {
     val app = App()
     val notifySender = NotificationMessageSender()
+    val denySender = DenyMessageSender()
+    val channel = System.getenv("SLACK_NOTIFICATION_CHANNEL")
 
     val col = KMongo.createClient(System.getenv("MONGO_URL")).getDatabase(System.getenv("MONGO_NAME")).getCollection<Meeting>()
-    val meetingHandler = MeetingHandler(notifySender, col)
+    val meetingHandler = MeetingHandler(notifySender, denySender, col, channel)
     val attenderHandler = AttenderHandler(col)
 
 //  Commands

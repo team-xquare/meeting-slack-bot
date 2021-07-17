@@ -13,8 +13,10 @@ import com.slack.api.model.block.ActionsBlock
 import com.slack.api.model.block.element.ButtonElement
 import model.Meeting
 import org.litote.kmongo.*
+import sender.dto.DenyMeeting
 import sender.dto.SenderMeeting
 import sender.exception.MeetingNotFoundException
+import sender.notification.DenySender
 import sender.notification.NotificationSender
 import view.modal.buildDenyModal
 import view.modal.buildScheduleModal
@@ -26,7 +28,9 @@ import java.util.*
  */
 class MeetingHandler(
     private val nfSender: NotificationSender,
-    private val col: MongoCollection<Meeting>
+    private val denySender: DenySender,
+    private val col: MongoCollection<Meeting>,
+    private val channel: String
 ) {
     /**
      * Handle request for adding schedules
@@ -182,10 +186,11 @@ class MeetingHandler(
         col.updateOne(result::meetingId eq value, Meeting::denys setTo denys)
         col.updateOne(result::meetingId eq value, Meeting::denyReason setTo result.denyReason)
 
-        ctx.respond { it
-            .responseType(ResponseTypes.ephemeral)
-            .text("✅ 회의 참여 거부가 성공적으로 완료되었습니다.")
-        }
+        denySender.sendNotification(
+            DenyMeeting(
+                userId, channel, reason
+            )
+        )
 
         return ctx.ack()
     }
