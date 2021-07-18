@@ -16,8 +16,10 @@ import org.litote.kmongo.*
 import sender.dto.DenyMeeting
 import sender.dto.SenderMeeting
 import sender.exception.MeetingNotFoundException
+import sender.notification.DeleteMeetingSender
 import sender.notification.DenySender
 import sender.notification.NotificationSender
+import view.modal.buildDeleteModal
 import view.modal.buildDenyModal
 import view.modal.buildScheduleModal
 import java.util.*
@@ -29,6 +31,7 @@ import java.util.*
 class MeetingHandler(
     private val nfSender: NotificationSender,
     private val denySender: DenySender,
+    private val deleteSender: DeleteMeetingSender,
     private val col: MongoCollection<Meeting>,
     private val channel: String
 ) {
@@ -161,6 +164,11 @@ class MeetingHandler(
         return ctx.ack()
     }
 
+    /**
+     * Handle deny request from deny modal
+     *
+     * @return Response
+     */
     fun handleDenyView(request: ViewSubmissionRequest, ctx: ViewSubmissionContext): Response {
 
         val userId = request.payload.user.id
@@ -191,6 +199,29 @@ class MeetingHandler(
                 userId, channel, reason
             )
         )
+
+        return ctx.ack()
+    }
+
+    fun deleteMeeting(request: SlashCommandRequest, ctx: SlashCommandContext): Response {
+        val date = request.payload.text
+
+        val results = col.find(Meeting::date eq date)
+
+        ctx.client().viewsOpen { view -> view
+            .triggerId(ctx.triggerId)
+            .view(buildDeleteModal(results))
+        }
+
+        return ctx.ack()
+    }
+
+    fun handleDeleteMeetingView(request: ViewSubmissionRequest, ctx: ViewSubmissionContext): Response {
+        val meetingId = request.payload.view.state.values["delete-meeting-input-block"]!!["select-meeting"]!!.selectedOption.value
+
+        val result = col.findOneAndDelete(Meeting::meetingId eq meetingId) ?: throw MeetingNotFoundException()
+
+        deleteSender.sendNotification(result)
 
         return ctx.ack()
     }
